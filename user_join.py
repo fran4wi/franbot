@@ -21,10 +21,3 @@ def user_join_blocks(user_id):
     welcome_text = welcome_text.replace("__USER_ID__", user_id)
     welcome_json = json.loads(welcome_text)
     return welcome_json
-
-
-if __name__ == "__main__":
-    import json
-    with open("event_outputs_examples/team_join.json") as f:
-        js = json.load(f)
-        write_to_sheet(js)
