@@ -4,6 +4,7 @@ env*/
 .env
 # macOS
 .DS_Store
+__pycache__/
 
 # Editors
 .vscode/

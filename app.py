@@ -1,18 +1,20 @@
 import os
-import json
-import slack_bolt
-import slack_sdk
-import termcolor
-
+import user_join
+from dotenv import load_dotenv
 from slack_bolt import App
-from slack_sdk.webhook import WebhookClient
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-import user_join
 # This sample slack application uses SocketMode
 # For the companion getting started setup guide,
 # see: https://docs.slack.dev/tools/bolt-python/getting-started
-app = App(token=os.environ.get("SLACK_BOT_TOKEN"), signing_secret=os.environ.get("SLACK_SIGN_SECRET"))
+
+# use dotenv instead of system envvars
+load_dotenv()
+app = App(
+        name="FranBot",
+        token=os.getenv("SLACK_BOT_TOKEN"),
+        signing_secret=os.getenv("SLACK_SIGN_SECRET")
+        )
 
 
 @app.event("team_join") 
@@ -32,6 +34,15 @@ def event_team_join(event, say):
     say(blocks=welcome_json, text="!", channel=user_id)
     user_join.write_to_sheet(event)
 
+
+# match a message containing hello
+@app.message("hello")
+def handle_message_events(message, say):
+    say("hello")
+
+
 if __name__ == "__main__":
-    # app.start(int(os.environ.get("PORT", '6050')))
-    SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
+    try:
+        SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
+    except KeyboardInterrupt:
+        print("goodbye")
