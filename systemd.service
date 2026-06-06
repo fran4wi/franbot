@@ -1,0 +1,11 @@
+[Unit]
+Description=Unit file for Slack Bot
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=/bin/bash /home/shinysocks/fran4wi-slackbot/start.sh
+User=shinysocks
+
+[Install]
+WantedBy=multi-user.target

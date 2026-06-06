@@ -51,6 +51,15 @@ cd slack-bot-python
 # Run the app
 uv run app.py
 ```
+
+You can also run the app with a systemd service!
+```bash
+sudo ln systemd.service /etc/systemd/system/slackbot.service
+
+sudo systemctl enable slackbot
+sudo systemctl start slackbot
+```
+
 ## More examples
 Looking for more examples of Bolt for Python? Browse to [bolt-python/examples/](https://github.com/slackapi/bolt-python/tree/main/examples) for a long list of usage, server, and deployment code samples!
 
