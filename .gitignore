@@ -8,4 +8,4 @@ __pycache__/
 
 # Editors
 .vscode/
-sheets_env.json
+google_servicekey.json

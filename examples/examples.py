@@ -21,7 +21,7 @@ def message_hello(message, say):
     # app.client.chat_postMessage(
     channel=message.get("user")
     print("message contains hello!", channel)
-    with open("texts/welcome.json") as f:
+    with open("templates/welcome.json") as f:
         welcome_text = f.read()
     print("welcome text === ", welcome_text)
     welcome_text = welcome_text.replace("__USER_ID__", channel)

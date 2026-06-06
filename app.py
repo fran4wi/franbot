@@ -2,6 +2,7 @@ import os
 import user_join
 from dotenv import load_dotenv
 from slack_bolt import App
+from collections.abc import Callable
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
 # This sample slack application uses SocketMode
@@ -18,7 +19,8 @@ app = App(
 
 
 @app.event("team_join") 
-def event_team_join(event, say): 
+def handle_event__team_join(event:dict, say:Callable[[dict,str,str],None]) -> None:
+
     """
     event_team_join handles what happens when a new member joins the workspace. 
     
@@ -29,16 +31,11 @@ def event_team_join(event, say):
         event (_type_): _description_
         say (_type_): _description_
     """
-    user_id = event["user"]["id"]
-    welcome_json = user_join.user_join_blocks(user_id)
+    user_id : str = event["user"]["id"]
+    welcome_json : dict = user_join.new_workspace_user_message(user_id)
     say(blocks=welcome_json, text="!", channel=user_id)
     user_join.write_to_sheet(event)
-
-
-# match a message containing hello
-@app.message("hello")
-def handle_message_events(message, say):
-    say("hello")
+    return
 
 
 if __name__ == "__main__":

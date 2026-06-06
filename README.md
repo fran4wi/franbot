@@ -9,7 +9,7 @@ This is a Slack app built with the [Bolt for Python framework](https://docs.slac
 ## File Descriptions
 
  - `.env.sample`: contains a template for your environment variables. should be renamed to `.env`
- - `sheets_env.json`: gives the service key credentials so a google sheet can be updated.
+ - `google_servicekey.json`: gives the service key credentials so a google sheet can be updated.
  - `app.py`: entrypoint file.
  - `event_output_examples/`: contains code that isn't used, but is kept solely because it is helpful for getting onboarded into using slack's API.
  - `texts/`: json files with automatic responses to certain events. folder should probably be renamed, but I am lazy.
