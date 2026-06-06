@@ -17,7 +17,7 @@ def write_to_sheet(event_data:dict) -> None:
     last_name : str =user.get('profile').get("last_name")
     JOIN_WS_SHEET_ID : str = os.environ.get("JOIN_WS_SHEET_ID")
     event_ts: str = event_data.get("event_ts")
-    gc = gspread.service_account(filename='./sheets_env.json')
+    gc = gspread.service_account(filename='./google_servicekey.json')
     sheet = gc.open_by_key(JOIN_WS_SHEET_ID)
     worksheet = sheet.get_worksheet(0)
     worksheet.append_row([id, profile_email,first_name,last_name, event_ts])
@@ -37,6 +37,8 @@ def new_workspace_user_message(user_id:str)-> dict:
     with open("templates/welcome.json") as f:
         welcome_text:str = f.read()
     welcome_text = welcome_text.replace("__USER_ID__", user_id)
-    welcome_text = welcome_text.replace("__VOLUNTEER_HANDBOOK_CANVAS_LINK__", os.environ.get("VOLUNTEER_HANDBOOK_CANVAS_LINK"))
+    welcome_text = welcome_text.replace("__VOLUNTEER_HANDBOOK_LINK__", os.environ.get("VOLUNTEER_HANDBOOK_LINK"))
+    welcome_text = welcome_text.replace("__NEW_WS_JOINER_REACHOUT_IDS__", os.environ.get("NEW_WS_JOINER_REACHOUT_IDS"))
     welcome_json : dict = json.loads(welcome_text)
+
     return welcome_json
