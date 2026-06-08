@@ -55,7 +55,7 @@ def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None])
 
 @app.message("bingo")
 def handle_message_events(message, say):
-    say("bongo")
+    say("bongo2")
 
 
 if __name__ == "__main__":
