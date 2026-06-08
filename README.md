@@ -54,10 +54,14 @@ uv run app.py
 
 You can also run the app with a systemd service!
 ```bash
-sudo ln systemd.service /etc/systemd/system/slackbot.service
+# make directory if it doesn't exist
+mkdir -p $HOME/.config/systemd/user/
 
-sudo systemctl enable slackbot
-sudo systemctl start slackbot
+# create a link so systemd can find the service
+ln -s systemd.service $HOME/.config/systemd/user/slackbot.service
+
+systemctl --user enable slackbot
+systemctl --user start slackbot
 ```
 
 ## More examples
