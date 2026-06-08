@@ -51,7 +51,11 @@ def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None])
     # Acknowledge command request
     ack()
     respond(f"hong!")
-    
+
+
+@app.message("bingo")
+def handle_message_events(message, say):
+    say("bongo")
 
 
 if __name__ == "__main__":
