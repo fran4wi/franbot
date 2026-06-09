@@ -7,3 +7,11 @@ jobs:
     steps:
       - name: Deploy Bot
         run: systemctl --user restart slackbot
+        env:
+          SLACK_BOT_TOKEN: ${{ vars.SLACK_BOT_TOKEN }}
+          SLACK_APP_TOKEN: ${{ vars.SLACK_APP_TOKEN }}
+          SLACK_SIGN_SECRET: ${{ vars.SLACK_SIGN_SECRET }}
+          SLACK_WEBHOOK_URL: ${{ vars.SLACK_SIGN_SECRET }}
+          JOIN_WS_SHEET_ID: ${{ vars.SLACK_SIGN_SECRET }}
+          VOLUNTEER_HANDBOOK_LINK: ${{ vars.SLACK_SIGN_SECRET }}
+          NEW_WS_JOINER_REACHOUT_IDS: ${{ vars.SLACK_SIGN_SECRET }}
