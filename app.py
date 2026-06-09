@@ -38,6 +38,16 @@ def handle_event__team_join(event:dict, say:Callable[[dict,str,str],None]) -> No
     return
 
 
+@app.message("hello")
+def message_hello(message, say):
+    # app.client.chat_postMessage(
+    user_id=message.get("user")
+    with open("templates/welcome.json") as f:
+        welcome_text = f.read()
+    welcome_json : dict = user_join.new_workspace_user_message(user_id)
+    say(blocks=welcome_json, text="!", channel=user_id)
+        # user_join.write_to_sheet(event)
+
 @app.command("/fran")
 def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None]):
     """
