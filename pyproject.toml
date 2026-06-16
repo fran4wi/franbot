@@ -2,7 +2,7 @@
 name = "hong-slackbot"
 version = "0.0.1"
 description = "TODO"
-# this replaces the requirements.txt
+requires-python = ">= 3.13"
 dependencies = [
     "slack-bolt==1.28.0",
     "termcolor==3.3.0",

@@ -1,29 +1,34 @@
-import os
-import user_join
-from dotenv import load_dotenv
+from os import getenv
 from slack_bolt import App
+from dotenv import load_dotenv
+from gspread import service_account
 from collections.abc import Callable
+from user_join import new_workspace_user_message
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
-# This sample slack application uses SocketMode
-# For the companion getting started setup guide,
-# see: https://docs.slack.dev/tools/bolt-python/getting-started
+# constants
+GOOGLE_SERVICE_KEY_PATH: str = "./google_servicekey.json"
+WELCOME_TEMPLATE_PATH: str = "templates/welcome.json"
+
+# global state variables
+WELCOME_TEMPLATE: str = ""
+GOOGLE_SHEET = None
 
 # use dotenv instead of system envvars
 load_dotenv()
+
 app = App(
-        name="FranBot",
-        token=os.getenv("SLACK_BOT_TOKEN"),
-        signing_secret=os.getenv("SLACK_SIGN_SECRET")
-        )
+    name="FranBot",
+    token=getenv("SLACK_BOT_TOKEN"),
+    signing_secret=getenv("SLACK_SIGN_SECRET"),
+)
 
 
-@app.event("team_join") 
-def handle_event__team_join(event:dict, say:Callable[[dict,str,str],None]) -> None:
-
+@app.event("team_join")
+def handle_event__team_join(event: dict, say: Callable[[dict, str, str], None]) -> None:
     """
-    event_team_join handles what happens when a new member joins the workspace. 
-    
+    event_team_join handles what happens when a new member joins the workspace.
+
     It will a function that sends a welcome message through a direct message to the volunteer,
     then write a message to a channel,
 
@@ -31,51 +36,57 @@ def handle_event__team_join(event:dict, say:Callable[[dict,str,str],None]) -> No
         event (_type_): _description_
         say (_type_): _description_
     """
-    user_id : str = event["user"]["id"]
-    welcome_json : dict = user_join.new_workspace_user_message(user_id)
+    user_id = event["user"]["id"]
+    welcome_json = new_workspace_user_message(user_id, WELCOME_TEMPLATE)
+
     say(blocks=welcome_json, text="!", channel=user_id)
-    user_join.write_to_sheet(event)
-    return
+    user_join.write_to_sheet(event, GOOGLE_SHEET)
+
 
 @app.command("/test_welcome_message")
-def test_welcome_message(ack, body:dict, say):
+def test_welcome_message(ack, body: dict, say):
     """
-    test_welcome_message : a command we use to make sure our welcome message is formatted correctly. 
+    test_welcome_message : a command we use to make sure our welcome message is formatted correctly.
 
     Args:
-        ack (Callable[[], None]): used to tell slack you got the command request. 
+        ack (Callable[[], None]): used to tell slack you got the command request.
         body (dict ) : information on who and where the command was called. we are using it so that we can
         see where the DM should be sent back to.
-        say(Callable[[dict,str,str],None]): the response you give back to the end user, through their DM's. 
+        say(Callable[[dict,str,str],None]): the response you give back to the end user, through their DM's.
     """
     # Acknowledge command request
     ack()
-    # print(args.body)
-    
-    user_id=body.get("user_id")
-    with open("templates/welcome.json") as f:
-        welcome_text = f.read()
-    welcome_json : dict = user_join.new_workspace_user_message(user_id)
+
+    user_id = body.get("user_id")
+    welcome_json = new_workspace_user_message(user_id, WELCOME_TEMPLATE)
     say(blocks=welcome_json, text="!", channel=user_id)
-    
+
 
 @app.command("/fran")
 def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None]):
     """
-    fran_hong_ping_pong : a command that's like the normal ping command , which returns "pong". 
+    fran_hong_ping_pong : a command that's like the normal ping command , which returns "pong".
         - however, instead, the command is "/fran" and it returns "hong!"
 
     Args:
-        ack (Callable[[], None]): used to tell slack you got the command request. 
+        ack (Callable[[], None]): used to tell slack you got the command request.
         respond (Callable[[str], None]): the response you give back to the end user.
     """
     # Acknowledge command request
     ack()
-    respond(f"hong!")
+    respond("hong!")
 
 
 if __name__ == "__main__":
+    # load welcome message from file
+    with open(WELCOME_TEMPLATE_PATH) as f:
+        WELCOME_TEMPLATE = f.read()
+
+    # load google sheet from file
+    gc = service_account(filename=GOOGLE_SERVICE_KEY_PATH)
+    GOOGLE_SHEET = gc.open_by_key(getenv("JOIN_WS_SHEET_ID"))
+
     try:
-        SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
+        SocketModeHandler(app, getenv("SLACK_APP_TOKEN")).start()
     except KeyboardInterrupt:
         print("goodbye")
