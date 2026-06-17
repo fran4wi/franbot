@@ -12,8 +12,6 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
-          SLACK_SIGN_SECRET: ${{ secrets.SLACK_SIGN_SECRET }}
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          JOIN_WS_SHEET_ID: ${{ secrets.JOIN_WS_SHEET_ID }}
-          VOLUNTEER_HANDBOOK_LINK: ${{ secrets.VOLUNTEER_HANDBOOK_LINK }}
-          NEW_WS_JOINER_REACHOUT_IDS: ${{ secrets.NEW_WS_JOINER_REACHOUT_IDS }}
+          WORKSPACE_JOIN_TEMPLATE_PATH: ${{ secrets.WORKSPACE_JOIN_TEMPLATE_PATH }}
+          GSHEET_LOG_IDS: ${{ secrets.GSHEET_LOG_IDS }}
+          GOOGLE_SERVICEKEY_JSON: ${{ secrets.GOOGLE_SERVICEKEY_JSON }}
