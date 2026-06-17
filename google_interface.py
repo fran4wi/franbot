@@ -37,18 +37,25 @@ class Google_Container:
             raise Exception(f"It looks like our Google Container has not been Initialized!  {args}")
         
     
-    def ERRORS(self, row: list):
+    def LOG_ERROR(self, row: list):
         self._check_for_service_account(f"{__file__}:ERRORS()");
         try: 
             sheet : gspread.Worksheet = self.sheets["ERRORS"]
-            row.insert(0, datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
+            row.insert(0, datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
             sheet.append_row(row)
             
         except KeyError:
             raise Exception(f"ERRORS google sheet does not seem to exist! {__file__}:ERRORS()")
-    
-    
-        # if self.sheets.get("ERRORS") == None: 
+    def fran(self, row: list = []):
+        self._check_for_service_account(f"{__file__}:fran()");
+        try: 
+            sheet : gspread.Worksheet = self.sheets["FRAN_COMMAND"]
+            row.insert(0, datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+            sheet.append_row(row)
+            
+        except KeyError:
+            raise Exception(f"ERRORS google sheet does not seem to exist! {__file__}:FRAN_COMMAND()")
+        
     def new_user_join(self, event_data:dict):
         """
         write_to_sheet writes the event data for a new user
@@ -68,7 +75,7 @@ class Google_Container:
         event_ts: str = event_data.get("event_ts")
         try: 
             sheet : gspread.Worksheet = self.sheets["WORKSPACE_JOIN"]
-            sheet.append_row([ datetime.now().strftime("%d/%m/%Y, %H:%M:%S"),id, profile_email, first_name, last_name, event_ts])
+            sheet.append_row([ datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),id, profile_email, first_name, last_name, event_ts])
             
         except KeyError:
             raise Exception(f"ERRORS google sheet does not seem to exist! {__file__}:ERRORS()")
@@ -79,19 +86,3 @@ class Google_Container:
         
         
 container = Google_Container()
-
-
-if __name__ == "__main__":
-    from dotenv import load_dotenv
-    import json 
-    from os import getenv
-    load_dotenv()
-    gsheet_api_key = json.loads(getenv("GOOGLE_SERVICEKEY_JSON"))
-    # sheet_ids = {"WORKSPACE_JOIN": {"workbook_id": "17oGBx0-DBi7pVCQJ00RXxMhmGe4TVMyYrDiK2QxCnxc", "worksheet_name": "WORKSPACE_JOIN"}, "ERRORS": {"workbook_id": "17oGBx0-DBi7pVCQJ00RXxMhmGe4TVMyYrDiK2QxCnxc", "worksheet_name": "ERRORS"}}
-    with open("examples/event_outputs/team_join.json") as f:
-        js = json.load(f)
-        
-    sheet_ids = [{"workbook_id": "17oGBx0-DBi7pVCQJ00RXxMhmGe4TVMyYrDiK2QxCnxc", "worksheet_name": "WORKSPACE_JOIN"},{"workbook_id": "17oGBx0-DBi7pVCQJ00RXxMhmGe4TVMyYrDiK2QxCnxc", "worksheet_name": "ERRORS"}]
-    container.initialize(gsheet_api_key, sheet_ids)
-    # container.ERRORS(["this is a test error!", "wooooo"])
-    container.new_user_join(js)

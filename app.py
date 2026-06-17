@@ -1,10 +1,11 @@
 import json
 from os import getenv
+from os.path import exists as path_exists
 from slack_bolt import App
 from dotenv import load_dotenv
 from gspread import service_account
 from collections.abc import Callable
-import user_join
+import utils
 from google_interface import container as Google_Interface
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 
@@ -38,8 +39,9 @@ def handle_event__team_join(event: dict, say: Callable[[dict, str, str], None]) 
         event (_type_): _description_
         say (_type_): _description_
     """
+    print(event)
     user_id = event["user"]["id"]
-    welcome_json = user_join.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
+    welcome_json = utils.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
 
     say(blocks=welcome_json, text="!", channel=user_id)
     Google_Interface.new_user_join(event)
@@ -61,7 +63,7 @@ def test_welcome_message(ack, body: dict, say):
     ack()
 
     user_id = body.get("user_id")
-    welcome_json = user_join.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
+    welcome_json = utils.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
     say(blocks=welcome_json, text="!", channel=user_id)
 
 
@@ -77,8 +79,9 @@ def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None])
     """
     # Acknowledge command request
     ack()
-    print("!!!!")
+    # print("!!!!")
     respond("hong!")
+    Google_Interface.fran([]);
 
 
 if __name__ == "__main__":
@@ -87,13 +90,7 @@ if __name__ == "__main__":
     
     # load welcome message from file
     Google_Interface.initialize(gsheet_api_key, gsheet_ids)
-    with open(WELCOME_TEMPLATE_PATH) as f:
-        WELCOME_TEMPLATE = f.read()
-
-    # # load google sheet from file
-    # gc = service_account(filename=GOOGLE_SERVICE_KEY_PATH)
-    # GOOGLE_SHEET = gc.open_by_key(getenv("JOIN_WS_SHEET_ID"))
-
+    WELCOME_TEMPLATE = utils.load_template(getenv("WORKSPACE_JOIN_TEMPLATE_PATH"))
     try:
         SocketModeHandler(app, getenv("SLACK_APP_TOKEN")).start()
     except KeyboardInterrupt:
