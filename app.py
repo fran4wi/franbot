@@ -1,18 +1,17 @@
 from os import getenv
+from json import loads
+from os.path import exists as path_exists
 from slack_bolt import App
 from dotenv import load_dotenv
 from gspread import service_account
 from collections.abc import Callable
-from user_join import new_workspace_user_message
+import utils
+from google_interface import Google_Container
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-
-# constants
-GOOGLE_SERVICE_KEY_PATH: str = "./google_servicekey.json"
-WELCOME_TEMPLATE_PATH: str = "templates/welcome.json"
 
 # global state variables
 WELCOME_TEMPLATE: str = ""
-GOOGLE_SHEET = None
+GOOGLE_INTERFACE = None
 
 # use dotenv instead of system envvars
 load_dotenv()
@@ -36,11 +35,13 @@ def handle_event__team_join(event: dict, say: Callable[[dict, str, str], None]) 
         event (_type_): _description_
         say (_type_): _description_
     """
+    print(event)
     user_id = event["user"]["id"]
-    welcome_json = new_workspace_user_message(user_id, WELCOME_TEMPLATE)
+    welcome_json = utils.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
 
     say(blocks=welcome_json, text="!", channel=user_id)
-    user_join.write_to_sheet(event, GOOGLE_SHEET)
+    GOOGLE_INTERFACE.new_user_join(event)
+    # user_join.write_to_sheet(event, GOOGLE_SHEET)
 
 
 @app.command("/test_welcome_message")
@@ -58,7 +59,7 @@ def test_welcome_message(ack, body: dict, say):
     ack()
 
     user_id = body.get("user_id")
-    welcome_json = new_workspace_user_message(user_id, WELCOME_TEMPLATE)
+    welcome_json = utils.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
     say(blocks=welcome_json, text="!", channel=user_id)
 
 
@@ -74,18 +75,20 @@ def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None])
     """
     # Acknowledge command request
     ack()
+    # print("!!!!")
     respond("hong!")
+    GOOGLE_INTERFACE.fran([])
 
 
 if __name__ == "__main__":
-    # load welcome message from file
-    with open(WELCOME_TEMPLATE_PATH) as f:
-        WELCOME_TEMPLATE = f.read()
+    # create a new google container
+    GOOGLE_INTERFACE = Google_Container(
+        loads(getenv("GOOGLE_SERVICEKEY_JSON")), loads(getenv("GSHEET_LOG_IDS"))
+    )
 
-    # load google sheet from file
-    gc = service_account(filename=GOOGLE_SERVICE_KEY_PATH)
-    GOOGLE_SHEET = gc.open_by_key(getenv("JOIN_WS_SHEET_ID"))
-
+    WELCOME_TEMPLATE = utils.load_template(
+        getenv("WORKSPACE_JOIN_TEMPLATE_PATH"), GOOGLE_INTERFACE
+    )
     try:
         SocketModeHandler(app, getenv("SLACK_APP_TOKEN")).start()
     except KeyboardInterrupt:
