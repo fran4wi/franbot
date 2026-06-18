@@ -1,21 +1,17 @@
-import json
 from os import getenv
+from json import loads
 from os.path import exists as path_exists
 from slack_bolt import App
 from dotenv import load_dotenv
 from gspread import service_account
 from collections.abc import Callable
 import utils
-from google_interface import container as Google_Interface
+from google_interface import Google_Container
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-
-# constants
-GOOGLE_SERVICE_KEY_PATH: str = "./google_servicekey.json"
-WELCOME_TEMPLATE_PATH: str = "templates/welcome.json"
 
 # global state variables
 WELCOME_TEMPLATE: str = ""
-GOOGLE_SHEET = None
+GOOGLE_INTERFACE = None
 
 # use dotenv instead of system envvars
 load_dotenv()
@@ -44,7 +40,7 @@ def handle_event__team_join(event: dict, say: Callable[[dict, str, str], None]) 
     welcome_json = utils.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
 
     say(blocks=welcome_json, text="!", channel=user_id)
-    Google_Interface.new_user_join(event)
+    GOOGLE_INTERFACE.new_user_join(event)
     # user_join.write_to_sheet(event, GOOGLE_SHEET)
 
 
@@ -81,16 +77,18 @@ def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None])
     ack()
     # print("!!!!")
     respond("hong!")
-    Google_Interface.fran([]);
+    GOOGLE_INTERFACE.fran([])
 
 
 if __name__ == "__main__":
-    gsheet_api_key = json.loads(getenv("GOOGLE_SERVICEKEY_JSON"))
-    gsheet_ids = json.loads(getenv("GSHEET_LOG_IDS"))
-    
-    # load welcome message from file
-    Google_Interface.initialize(gsheet_api_key, gsheet_ids)
-    WELCOME_TEMPLATE = utils.load_template(getenv("WORKSPACE_JOIN_TEMPLATE_PATH"))
+    # create a new google container
+    GOOGLE_INTERFACE = Google_Container(
+        loads(getenv("GOOGLE_SERVICEKEY_JSON")), loads(getenv("GSHEET_LOG_IDS"))
+    )
+
+    WELCOME_TEMPLATE = utils.load_template(
+        getenv("WORKSPACE_JOIN_TEMPLATE_PATH"), GOOGLE_INTERFACE
+    )
     try:
         SocketModeHandler(app, getenv("SLACK_APP_TOKEN")).start()
     except KeyboardInterrupt:
