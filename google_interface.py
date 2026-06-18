@@ -8,6 +8,17 @@ class Google_Container:
     def __init__(self):
         pass
     def get_worksheet(self, sheet_info: dict) -> gspread.Worksheet:
+        """
+        get_worksheet getter for a specific google sheet
+
+        Args:
+            sheet_info (dict): 
+                - workbook_id : the id of the google sheet being used
+                - worksheet_name : the name of the worksheet that either is in the google sheet or needs to be made. 
+
+        Returns:
+            gspread.Worksheet: Worksheet instance that was either fetched or created. 
+        """
         workbook = self.service_account.open_by_key(sheet_info.get("workbook_id"))
         sheet = None
         try: 
@@ -19,7 +30,7 @@ class Google_Container:
 
     def initialize(self, credentials_dict: dict, sheet_infos: list):
         """
-        initialize _summary_
+        initialize gets all the relevant worksheets we need access to.
 
         Args:
             credentials_dict (dict): _description_
@@ -33,11 +44,21 @@ class Google_Container:
         print(self.sheets)
     
     def _check_for_service_account(self, args):
+        """
+        _check_for_service_account makes sure functions arent being called while the object hasn't been populated
+
+        Args:
+            args (_type_): things to output in the exception message. 
+
+        Raises:
+            Exception: if the container hasnt been instantiated
+        """
         if self.service_account == None: 
             raise Exception(f"It looks like our Google Container has not been Initialized!  {args}")
         
     
     def LOG_ERROR(self, row: list):
+
         self._check_for_service_account(f"{__file__}:ERRORS()");
         try: 
             sheet : gspread.Worksheet = self.sheets["ERRORS"]
