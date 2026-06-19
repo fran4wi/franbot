@@ -1,14 +1,14 @@
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "dev" ]
 jobs:
   build:
     runs-on: self-hosted
     steps:
       - name: Deploy Bot
         run: |
-          env > $HOME/fran4wi-slackbot/.env
-          systemctl --user restart slackbot
+          env > $HOME/franbot/.env
+          systemctl --user restart franbot-dev
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}

@@ -4,7 +4,7 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=/home/shinysocks/fran4wi-slackbot/start.sh
+ExecStart=/home/shinysocks/franbot-dev/start.sh
 User=shinysocks
 
 [Install]
