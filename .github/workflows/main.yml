@@ -4,6 +4,7 @@ on:
     branches: [ "main" ]
 jobs:
   build:
+    environment: main
     runs-on: self-hosted
     steps:
       - name: Deploy Bot to Production
