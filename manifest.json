@@ -1,6 +1,6 @@
 {
     "display_information": {
-        "name": "FranBotDev",
+        "name": "FranBot",
         "description": "Friends for Francesca Hong SlackBot!",
         "background_color": "#202958"
     },
@@ -11,7 +11,7 @@
             "messages_tab_read_only_enabled": false
         },
         "bot_user": {
-            "display_name": "FranBotDev",
+            "display_name": "FranBot",
             "always_online": true
         },
         "slash_commands": [
