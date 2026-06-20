@@ -1,11 +1,11 @@
 [Unit]
-Description=Unit file for Slack Bot
+Description=Franbot service
 Wants=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=/home/shinysocks/fran4wi-slackbot/start.sh
-User=shinysocks
+ExecStart=%h/franbot/start.sh
+User=%u
 
 [Install]
 WantedBy=multi-user.target
