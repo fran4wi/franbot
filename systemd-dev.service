@@ -1,10 +1,10 @@
 [Unit]
-Description=Franbot Service
+Description=Franbot Dev service
 Wants=network-online.target
 After=network-online.target
 
 [Service]
-ExecStart=%h/franbot/start.sh
+ExecStart=%h/repos/franbot-dev/start-dev.sh
 User=%u
 
 [Install]
