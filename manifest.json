@@ -1,47 +1,74 @@
 {
-  "display_information": {
-    "name": "A Bot for Hong Volunteer Slack"
-  },
-  "features": {
-    "app_home": {
-      "home_tab_enabled": false,
-      "messages_tab_enabled": true,
-      "messages_tab_read_only_enabled": false
+    "display_information": {
+        "name": "FranBotDev",
+        "description": "Friends for Francesca Hong SlackBot!",
+        "background_color": "#202958"
     },
-    "bot_user": {
-      "display_name": "FranBot",
-      "always_online": true
-    },
-    "slash_commands": [
+    "features": {
+        "app_home": {
+            "home_tab_enabled": false,
+            "messages_tab_enabled": true,
+            "messages_tab_read_only_enabled": false
+        },
+        "bot_user": {
+            "display_name": "FranBotDev",
+            "always_online": true
+        },
+        "slash_commands": [
             {
                 "command": "/fran",
                 "description": "should reply \"hong!\"",
                 "should_escape": false
+            },
+            {
+                "command": "/franbot/test/welcome_message",
+                "description": "used to make sure that the welcome message is formatted the way we need it to be. ",
+                "should_escape": false
+            },
+            {
+                "command": "/franbot/about",
+                "description": "gives information about franbot",
+                "should_escape": false
             }
         ]
-  },
-  "oauth_config": {
-    "scopes": {
-      "bot": [
-        "channels:history",
-        "chat:write",
-        "im:history"
-      ]
+    },
+    "oauth_config": {
+        "scopes": {
+            "bot": [
+                "canvases:read",
+                "channels:history",
+                "channels:join",
+                "channels:manage",
+                "channels:read",
+                "chat:write",
+                "groups:read",
+                "groups:write",
+                "im:history",
+                "im:write",
+                "mpim:read",
+                "team:read",
+                "users:read",
+                "canvases:write",
+                "commands"
+            ]
+        },
+        "pkce_enabled": false
+    },
+    "settings": {
+        "event_subscriptions": {
+            "bot_events": [
+                "member_joined_channel",
+                "message.channels",
+                "message.im",
+                "team_join"
+            ]
+        },
+        "interactivity": {
+            "is_enabled": true
+        },
+        "org_deploy_enabled": false,
+        "socket_mode_enabled": true,
+        "token_rotation_enabled": false,
+        "is_mcp_enabled": false
     }
-  },
-  "settings": {
-    "event_subscriptions": {
-      "bot_events": [
-        "message.channels",
-        "message.im",
-        "team_join"
-      ]
-    },
-    "interactivity": {
-      "is_enabled": true
-    },
-    "org_deploy_enabled": false,
-    "socket_mode_enabled": true,
-    "token_rotation_enabled": false
-  }
 }

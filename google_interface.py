@@ -21,8 +21,6 @@ class Google_Container:
             sheet = self.get_worksheet(sheet_info)
             self.sheets[sheet_info.get("worksheet_name")] = sheet
 
-        print(self.sheets)
-
     def get_worksheet(self, sheet_info: dict) -> gspread.Worksheet:
         workbook = self.service_account.open_by_key(sheet_info.get("workbook_id"))
         sheet = None

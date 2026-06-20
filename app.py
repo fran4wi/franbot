@@ -8,7 +8,9 @@ from collections.abc import Callable
 import utils
 from google_interface import Google_Container
 from slack_bolt.adapter.socket_mode import SocketModeHandler
+from datetime import datetime
 
+ABOUT_STRING = datetime.now().strftime( "%m/%d/%Y, %H:%M:%S")
 # global state variables
 WELCOME_TEMPLATE: str = ""
 GOOGLE_INTERFACE = None
@@ -35,7 +37,6 @@ def handle_event__team_join(event: dict, say: Callable[[dict, str, str], None]) 
         event (_type_): _description_
         say (_type_): _description_
     """
-    print(event)
     user_id = event["user"]["id"]
     welcome_json = utils.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
 
@@ -44,7 +45,7 @@ def handle_event__team_join(event: dict, say: Callable[[dict, str, str], None]) 
     # user_join.write_to_sheet(event, GOOGLE_SHEET)
 
 
-@app.command("/test_welcome_message")
+@app.command("/franbot/test/welcome_message")
 def test_welcome_message(ack, body: dict, say):
     """
     test_welcome_message : a command we use to make sure our welcome message is formatted correctly.
@@ -62,12 +63,11 @@ def test_welcome_message(ack, body: dict, say):
     welcome_json = utils.new_workspace_user_message(user_id, WELCOME_TEMPLATE)
     say(blocks=welcome_json, text="!", channel=user_id)
 
-
-@app.command("/fran")
-def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None]):
+@app.command("/franbot/about")
+def command_about(ack: Callable[[], None], respond: Callable[[str], None]):
     """
-    fran_hong_ping_pong : a command that's like the normal ping command , which returns "pong".
-        - however, instead, the command is "/fran" and it returns "hong!"
+    command_about : command that gives information about the bot. right now, it only gives
+    the latest time it was deployed.
 
     Args:
         ack (Callable[[], None]): used to tell slack you got the command request.
@@ -76,9 +76,8 @@ def fran_hong_ping_pong(ack: Callable[[], None], respond: Callable[[str], None])
     # Acknowledge command request
     ack()
     # print("!!!!")
-    respond("hong!")
+    respond(ABOUT_STRING)
     GOOGLE_INTERFACE.fran([])
-
 
 if __name__ == "__main__":
     # create a new google container
