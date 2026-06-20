@@ -1,6 +1,25 @@
 [
-    {
-        "type": "markdown",
-        "text": "# Welcome!\n\nHey, <@__USER_ID__>! Welcome to Francesca Hong's Volunteer Workspace! We are really glad you are here. The trickiest part of getting involved is finding out where to start -- here are some resources for doing that!\n\nIn the canvas attached to the https://testworkspace-ozj2603.slack.com/archives/C0B2HTBB0E7 channel, you can find the _*Volunteer Handbook*_, which includes:\n\n* an overview of our slack channels\n* who our staff and volunteer leadership is, and  \n* our community code of conduct that you are be expected to adhere to.\n\nif you have any questions, please feel free to reach out to:\n\n<@U0APZQNV1B8>\n<@U0B7Q9FLXT6>\n"
-    }
-]
+		{
+			"type": "markdown",
+			"text": "# Welcome!\n\nHey, <@__USER_ID__>! Welcome to Francesca Hong's Volunteer Workspace! We are really glad you are here. The trickiest part of getting involved is finding out where to start -- here are some resources for doing that!\n\nIn the canvas attached to the https://testworkspace-ozj2603.slack.com/archives/C0B2HTBB0E7 channel,"
+		},
+		{
+			"type": "markdown",
+			"text": "https://testworkspace-ozj2603.slack.com/archives/C0B2HTBB0E7"
+		},
+		{
+			"type": "markdown",
+			"text": "you can find the _*Volunteer Handbook*_, which includes:\n\n* an overview of our slack channels\n* who our staff and volunteer leadership is, and  \n* our community code of conduct that you are expected to adhere to.\n\nIf you're on mobile, here's a visual to help you find it:"
+		},
+		{
+			"type": "image",
+			"slack_file": {
+				"url": "https://testworkspace-ozj2603.slack.com/files/U0APZQNV1B8/F0BCRUA7H0Q/introductions.gif"
+			},
+			"alt_text": "inspiration"
+		},
+		{
+			"type": "markdown",
+			"text": "\n\nif you have any questions, please feel free to reach out to:\n\n<@U0APZQNV1B8>\n<@U0B7Q9FLXT6>\n"
+		}
+	]
