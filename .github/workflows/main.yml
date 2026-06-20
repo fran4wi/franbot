@@ -1,0 +1,18 @@
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build:
+    environment: main
+    runs-on: self-hosted
+    steps:
+      - name: Deploy Bot to Production
+        run: |
+          env > $HOME/franbot/.env
+          systemctl --user restart franbot
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
+          WORKSPACE_JOIN_TEMPLATE_PATH: ${{ secrets.WORKSPACE_JOIN_TEMPLATE_PATH }}
+          GSHEET_LOG_IDS: ${{ secrets.GSHEET_LOG_IDS }}
+          GOOGLE_SERVICEKEY_JSON: ${{ secrets.GOOGLE_SERVICEKEY_JSON }}
