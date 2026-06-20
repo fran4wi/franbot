@@ -8,8 +8,7 @@ jobs:
     steps:
       - name: Deploy Bot to Dev
         run: |
-          env > $HOME/repos/franbot-dev/.env
-          systemctl --user restart franbot-dev
+          echo "malware goes here"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
