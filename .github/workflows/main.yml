@@ -1,4 +1,3 @@
-# TODO: change paths
 on:
   push:
     branches: [ "main" ]
@@ -9,8 +8,8 @@ jobs:
     steps:
       - name: Deploy Bot to Production
         run: |
-          env > $HOME/fran4wi-slackbot/.env
-          systemctl --user restart slackbot
+          env > $HOME/franbot/.env
+          systemctl --user restart franbot
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
