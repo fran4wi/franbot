@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /home/shinysocks/fran4wi-slackbot
+cd $HOME/repos/franbot-dev
 git restore .
-git pull && /home/shinysocks/.local/bin/uv run app.py
+git pull && $HOME/.local/bin/uv run app.py
